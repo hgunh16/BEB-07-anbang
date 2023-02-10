@@ -12,11 +12,12 @@ import Modal from 'react-modal';
 import "../assets/css/main.css";
 
 export default function NFTdetail() {
-
+    
     const location = useLocation();
-
     const [openModal, setOpenModal] = useState(false);
     console.log(location)
+
+
     // const tokenID = location.state.tokenID; // 토큰 ID
     const rentKinds = location.state.types // 임대 종류 전세 or 월세
     const image = location.state.imgURL // 건물 이미지

@@ -11,7 +11,7 @@ import { Description } from "@ethersproject/properties";
 import {erc721_ABI, NFT_contractAddress} from '../contract/NFT_ABI';
 import {ethers} from "ethers"
 
-export default function Mypage() {
+export default function NFT() {
 
     const [NFTInfo, setNFTInfo] = useState([])
 
@@ -44,7 +44,8 @@ export default function Mypage() {
       }, []);
     
       makingContract.tokenURI(96).then(e=>console.log(e));
-    //ipfs 받아오는 이미지 url
+    
+      //ipfs 받아오는 이미지 url
     useEffect(async () => {
       console.log(makingContract);
       console.log(NFTInfo[4].tokenId);
@@ -52,18 +53,14 @@ export default function Mypage() {
       const tokenURL = await makingContract.tokenURI(96);
       console.log(tokenURL);
       axios
-        .get(tokenURL)
+        .get(`https://cors-anywhere.herokuapp.com/${tokenURL}`)
         .then((res) => {
-          setNFTInfo({
-              ...NFTInfo,
-              nft_imgURL: res.data,
-              nft_address: res.data,
-              types: res.data
-          });
+          setNFTInfo(res.data);
         })
         .catch((err) => console.log(err));
     }, [NFTInfo]);
 
+    console.log(NFTInfo) // 여기까진 data 넘어옴 location.state가 왜 null? 
 
     return(
     <div className="flex flex-row">
@@ -90,7 +87,6 @@ export default function Mypage() {
         </div>
         ))}
     </div>
-
 
     )
 }

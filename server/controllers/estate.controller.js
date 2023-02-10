@@ -50,7 +50,7 @@ module.exports = {
                     rental,
                     description,
                     isSelling : true,
-                    tokenid,
+                    tokenId: tokenid,
                     // owner : data.id
                 })
             return res.status(200).json(newEstate);
