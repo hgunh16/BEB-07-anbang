@@ -53,35 +53,31 @@ useEffect(() => {
         }});
       };
 
-   
-  //     useEffect(() => {
-  //       axios
-  //         .get("http://localhost:8080/mypage/:id", NFTInfo)
-  //         .then((result) => {
-  //         console.log(result.data)
-  //         setNFTInfo(result.data);
-  //         })
-  //         .catch((err) => console.log(err));
-  //       }, []);
+    useEffect(() => {
+        axios
+          .get("http://localhost:8080/mypage/:id", NFTInfo)
+          .then((result) => {
+            setNFTInfo([...result.data]);
+          })
+          .catch((err) => console.log(err));
+      }, []);
 
-  
-  //   useEffect(() => {
-  //     axios
-  //       .get(`http://making.infura-ipfs.io/ipfs/${NFTInfo.nft_imgURL}`)
-  //       .then((res) => {
-  //         setNFTInfo({
-  //         ...NFTInfo,
-  //           nft_imgURL: res.data,
-  //           nft_address: res.data,
-  //           types: res.data
-  //         });
-  //       })
-  //     .catch((err) => console.log(err));
-  //     }, [NFTInfo]);
+    //ipfs 받아오는 이미지 url
+    useEffect(() => {
+        axios
+          .get(`http://making.infura-ipfs.io/ipfs/${NFTInfo.nft_imgURL}`)
+          .then((res) => {
+            setNFTInfo({
+                ...NFTInfo,
+                nft_imgURL: res.data,
+                nft_address: res.data,
+                types: res.data
+            });
+          })
+          .catch((err) => console.log(err));
+      }, [NFTInfo]);
     
 
-
-  
     return(
     <div className="flex flex-row">
         {ownedEstate.map((post)=> (

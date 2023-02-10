@@ -11,26 +11,27 @@ import { Description } from "@ethersproject/properties";
 import {erc721_ABI, NFT_contractAddress} from '../contract/NFT_ABI';
 import {ethers} from "ethers"
 
-export default function Mypage(props) {
+export default function NFT() {
 
     const [NFTInfo, setNFTInfo] = useState([])
 
     const navigate = useNavigate();
 
+
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const makingContract = new ethers.Contract(NFT_contractAddress, erc721_ABI, provider);
 
-    const NFTClick = () => {
+    const NFTClick = (types, imgURL, address, deposit, rental, description) => {
         navigate("/NFTdetail", { state: {
-            types: NFTInfo.types,
-            imgURL: NFTInfo.nft_imgURL,
-            address: NFTInfo.nft_address,
-            deposit: NFTInfo.deposit,
-            rental: NFTInfo.rental,
-            description: NFTInfo.description,
-            tokenId: NFTInfo.tokenId
+            types: types,
+            imgURL: imgURL,
+            address: address,
+            deposit: deposit,
+            rental: rental,
+            description: description,
         }});
       };
+
 
     useEffect(() => {
         axios
@@ -43,7 +44,8 @@ export default function Mypage(props) {
       }, []);
     
       makingContract.tokenURI(96).then(e=>console.log(e));
-    //ipfs 받아오는 이미지 url
+    
+      //ipfs 받아오는 이미지 url
     useEffect(async () => {
       console.log(makingContract);
       console.log(NFTInfo[4].tokenId);
@@ -53,17 +55,12 @@ export default function Mypage(props) {
       axios
         .get(`https://cors-anywhere.herokuapp.com/${tokenURL}`)
         .then((res) => {
-          setNFTInfo({
-              ...NFTInfo,
-              nft_imgURL: res.data,
-              nft_address: res.data,
-              types: res.data
-          });
+          setNFTInfo(res.data);
         })
         .catch((err) => console.log(err));
     }, [NFTInfo]);
 
-    //   console.log(NFTInfo)
+    console.log(NFTInfo) // 여기까진 data 넘어옴 location.state가 왜 null? 
 
     return(
     <div className="flex flex-row">
@@ -71,9 +68,16 @@ export default function Mypage(props) {
             <div>
             <div className="mt-5 w-[340px] h-[270px] rounded-xl mb-5">
             <div className="border shadow-lg rounded-lg hover:scale-105 duration-300">
-            <img onClick={()=> NFTClick()} 
+            <img onClick={()=> NFTClick(
+                post.types,
+                post.nft_imgURL,
+                post.nft_address,
+                post.deposit,
+                post.rental,
+                post.description,
+            )} 
             className="w-full h-[200px] object-cover rounded-t-lg" 
-            src={NFTInfo.nft_imgURL}></img>
+            src={post.nft_imgURL}></img>
                 <p className="mt-10 flex flex-row justify-center items-center">{`임대종류 : ${post.types}`}</p>
                 <p className="mt-5 flex flex-row justify-center items-center">{`주소 : ${post.nft_address}`}</p>   
                 <p className="mt-5 flex flex-row justify-center items-center">{`보증금 : ${post.deposit}`}</p> 
@@ -83,7 +87,6 @@ export default function Mypage(props) {
         </div>
         ))}
     </div>
-
 
     )
 }
