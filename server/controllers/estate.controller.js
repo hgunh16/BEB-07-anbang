@@ -37,8 +37,9 @@ module.exports = {
             // const data =jwt.verify(token,process.env.ACCESS_SECRET);
             // if(data)
             // {
-                const {types, deposit, rental, description, tokenId} = req.body;
-            
+                const {types, deposit, rental, description, tokenid} = req.body;
+                console.log(req.body);
+                console.log(tokenid);
                 if (!types || !deposit || !description) {
                     return res.status(400).json({ data: null, message: 'Invalid input' });
                 }
@@ -49,7 +50,7 @@ module.exports = {
                     rental,
                     description,
                     isSelling : true,
-                    tokenId,
+                    tokenid,
                     // owner : data.id
                 })
             return res.status(200).json(newEstate);

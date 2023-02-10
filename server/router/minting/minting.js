@@ -5,20 +5,16 @@ const Caver = require('caver-js');
 require('dotenv').config();
 const { server_address, server_privatekey } = process.env;
 
-const { erc721_ABI } = require('../../contract/web3js/NFT_ABI');
-
+const { erc721_ABI,  } = require('../../contract/web3js/NFT_ABI');
+const { erc20_ABI, erc20ContractAddr } = require('../../contract/web3js/ABI');
 const caver = new Caver('https://api.baobab.klaytn.net:8651/'); //ganache provider
 
-// const erc20Contract = new web3.eth.Contract(erc20_ABI, erc20ContractAddr); //erc20 contract 인스턴스화
+const Web3 = require('web3');
 
-// // const erc721ContractAddr = '0xb7D1AA1aDC463fD7c258819fe90464D3Be32d2C2'; // ganache erc721 CA 
-// const erc721Contract = new web3.eth.Contract(erc721_ABI, erc721ContractAddr);
-// const web3 = new Web3(new Web3.providers.HttpProvider('https://api.baobab.klaytn.net:8651/')); //ganache provider
+const web3 = new Web3(new Web3.providers.HttpProvider('https://api.baobab.klaytn.net:8651/')); //ganache provider
 
-// const erc20Contract = new web3.eth.Contract(erc20_ABI, erc20ContractAddr); //erc20 contract 인스턴스화
-const erc721ContractAddr = "0x48c88a6c6cf8f4E5f83759B47E1B9A76D7316FCc";
-// const erc721ContractAddr = '0xb7D1AA1aDC463fD7c258819fe90464D3Be32d2C2'; // ganache erc721 CA 
-// const erc721Contract = new web3.eth.Contract(erc721_ABI, erc721ContractAddr);
+const erc20Contract = new web3.eth.Contract(erc20_ABI, erc20ContractAddr); //erc20 contract 인스턴스화
+
 // ERC20 토큰으로 ERC721 NFT를 mint
 router.post('/',async (req,res)=>{
     // const {address, image, types} = req.body;
@@ -27,37 +23,25 @@ router.post('/',async (req,res)=>{
     res.send('hello');
     // const user_id = req.session.user_id;
     console.log("minting")
-    await caver.klay.getBalance("0x23802188302BDFc1fdA5246211698227873D7Db2").then(console.log);
+    // await caver.klay.getBalance("0x23802188302BDFc1fdA5246211698227873D7Db2").then(console.log);
     
-    const erc721Contract = caver.contract.create(erc721_ABI,"0x63c2b6625dA172860Aa79b528AA06D125821d029");
+    // const erc721Contract = caver.contract.create(erc721_ABI,"0x63c2b6625dA172860Aa79b528AA06D125821d029");
 
-    await erc721Contract.methods.name().call(console.log)
-    await caver.klay.getTransactionCount("0x23802188302BDFc1fdA5246211698227873D7Db2").then(console.log);
-    // const id = await erc721Contract.methods.mintNFT(server_address,server_address,tempImg).send({from:"0x23802188302BDFc1fdA5246211698227873D7Db2", gas: '30000000'});
-    // caver.klay.sendTransaction({
-    //   type: 'SMART_CONTRACT_EXECUTION',
-    //   from: '0x23802188302BDFc1fdA5246211698227873D7Db2',
-    //   to: '0x63c2b6625dA172860Aa79b528AA06D125821d029',
-    //   data: caver.klay.abi.encodeFunctionCall( erc721Contract.methods.mintNFT, (server_address,server_address,tempImg) ),
-    //   gas: '1000000'
-    // })
-    const keyring = caver.wallet.keyring.createFromPrivateKey(server_privatekey);
-    console.log(keyring)
-    caver.wallet.add(keyring);
-    const gasPrice = await caver.klay.getGasPrice();
-    const vt = caver.transaction.smartContractExecution.create({
-      from: keyring.address,
-      to: '0x63c2b6625dA172860Aa79b528AA06D125821d029',
-      input: erc721Contract.methods.mintNFT(server_address,tempImg).encodeABI(),
-      gas: gasPrice,
-    })
-  console.log(gasPrice);
-  // Sign to the transaction
-  const signed = await caver.wallet.sign(keyring.address, vt)
+    // await erc721Contract.methods.name().call(console.log)
+    // await caver.klay.getTransactionCount("0x23802188302BDFc1fdA5246211698227873D7Db2").then(console.log);
 
-  const receipt = await caver.rpc.klay.sendRawTransaction(signed)
-    console.log(receipt)
-  // const receipt = await erc721Contract.send({ from: keyring.address, gas: '0x4bfd200' }, 'mintNFT', server_address, tempImg);
+    // const keyring = caver.wallet.keyring.createFromPrivateKey(server_privatekey);
+    // console.log(keyring)
+    // caver.wallet.add(keyring);
+    // const gasPrice = await caver.klay.getGasPrice();
+
+    console.log(erc20Contract);
+    // Sign to the transaction
+    // const signed = await caver.wallet.sign(keyring.address, vt)
+
+    // const receipt = await caver.rpc.klay.sendRawTransaction(signed)
+    // console.log(receipt)
+    // const receipt = await erc721Contract.send({ from: keyring.address, gas: '0x4bfd200' }, 'mintNFT', server_address, tempImg);
     // await erc721Contract.send({from:'0x23802188302BDFc1fdA5246211698227873D7Db2', gas: '1000000'}, 'mintNFT', server_address,server_address,tempImg)
     
     // console.log(erc721Contract.methods);
