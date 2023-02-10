@@ -86,7 +86,6 @@ export default function Register() {
         description: mintNFT.description,
         types: mintNFT.types
       });
-  
       return url;
     } catch (e) {
       console.log(e);
@@ -161,7 +160,7 @@ export default function Register() {
 
   async function postDB (event){
     event.preventDefault();
-    // console.log(mintNFT);
+    console.log(mintNFT);
     handleClickCreate();
     console.log(makingContract);
     const ContractWithSigner = await provider.send("eth_requestAccounts", []).then( _=>provider.getSigner()).then(signer=>

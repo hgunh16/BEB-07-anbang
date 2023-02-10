@@ -17,7 +17,7 @@ export default function Mypage(props) {
 
     const NFTClick = () => {
         navigate("/NFTdetail", { state: {
-            type: NFTInfo.nft_type,
+            types: NFTInfo.types,
             imgURL: NFTInfo.nft_imgURL,
             address: NFTInfo.nft_address,
             deposit: NFTInfo.deposit,
@@ -34,26 +34,27 @@ export default function Mypage(props) {
           })
           .catch((err) => console.log(err));
       }, []);
-
+    
 
     //ipfs 받아오는 이미지 url
     useEffect(() => {
         axios
-          .get(`https://ipfs.io/ipfs/${NFTInfo.nft_imgURL}`)
-          .then((result) => {
+          .get(`http://making.infura-ipfs.io/ipfs/${NFTInfo.nft_imgURL}`)
+          .then((res) => {
             setNFTInfo({
                 ...NFTInfo,
-                nft_imgURL: result.data,
-                nft_address: result.data,
-                nft_type: result.data
+                nft_imgURL: res.data,
+                nft_address: res.data,
+                types: res.data
             });
           })
           .catch((err) => console.log(err));
       }, [NFTInfo]);
 
+    //   console.log(NFTInfo)
 
     return(
-    <div className="flex flex-row items-center">
+    <div className="flex flex-row">
         {NFTInfo && NFTInfo.map((post)=> (
             <div>
             <div className="mt-5 w-[340px] h-[270px] rounded-xl mb-5">
@@ -61,7 +62,7 @@ export default function Mypage(props) {
             <img onClick={()=> NFTClick()} 
             className="w-full h-[200px] object-cover rounded-t-lg" 
             src={NFTInfo.nft_imgURL}></img>
-                <p className="mt-10 flex flex-row justify-center items-center">{`임대종류 : ${post.nft_type}`}</p>
+                <p className="mt-10 flex flex-row justify-center items-center">{`임대종류 : ${post.types}`}</p>
                 <p className="mt-5 flex flex-row justify-center items-center">{`주소 : ${post.nft_address}`}</p>   
                 <p className="mt-5 flex flex-row justify-center items-center">{`보증금 : ${post.deposit}`}</p> 
                 <p className="mt-5 flex flex-row justify-center items-center">{`월세 : ${post.rental}`}</p> 
