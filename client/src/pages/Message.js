@@ -19,7 +19,7 @@ export default function Message() {
     const [selectedUser, setSelectedUser] = useState('나');
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState('');
-  
+    
     function handleSubmit(event) {
         event.preventDefault();
         const message = {

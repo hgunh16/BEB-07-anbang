@@ -51,7 +51,7 @@ export default function Mypage(props) {
       const tokenURL = await makingContract.tokenURI(96);
       console.log(tokenURL);
       axios
-        .get(tokenURL)
+        .get(`https://cors-anywhere.herokuapp.com/${tokenURL}`)
         .then((res) => {
           setNFTInfo({
               ...NFTInfo,
