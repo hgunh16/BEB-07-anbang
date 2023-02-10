@@ -8,49 +8,61 @@ import axios from "axios";
 // stylesheet
 import "../assets/css/main.css";
 import { Description } from "@ethersproject/properties";
+import {erc721_ABI, NFT_contractAddress} from '../contract/NFT_ABI';
+import {ethers} from "ethers"
 
-export default function Mypage(props) {
+export default function Mypage() {
 
     const [NFTInfo, setNFTInfo] = useState([])
 
     const navigate = useNavigate();
 
-    const NFTClick = () => {
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const makingContract = new ethers.Contract(NFT_contractAddress, erc721_ABI, provider);
+
+    const NFTClick = (types, imgURL, address, deposit, rental, description) => {
         navigate("/NFTdetail", { state: {
-            types: NFTInfo.types,
-            imgURL: NFTInfo.nft_imgURL,
-            address: NFTInfo.nft_address,
-            deposit: NFTInfo.deposit,
-            rental: NFTInfo.rental,
-            description: NFTInfo.description,
-            // tokenID: NFTInfo.tokenID
+            types: types,
+            imgURL: imgURL,
+            address: address,
+            deposit: deposit,
+            rental: rental,
+            description: description,
         }});
       };
+
 
     useEffect(() => {
         axios
           .get("http://localhost:8080/estate", NFTInfo)
           .then((result) => {
+            // console.log(result.data);
             setNFTInfo([...result.data])
           })
           .catch((err) => console.log(err));
       }, []);
     
-
+      makingContract.tokenURI(96).then(e=>console.log(e));
     //ipfs 받아오는 이미지 url
-    useEffect(() => {
-        axios
-          .get(`http://making.infura-ipfs.io/ipfs/${NFTInfo.nft_imgURL}`)
-          .then((res) => {
-            setNFTInfo({
-                ...NFTInfo,
-                nft_imgURL: res.data,
-                nft_address: res.data,
-                types: res.data
-            });
-          })
-          .catch((err) => console.log(err));
-      }, [NFTInfo]);
+    useEffect(async () => {
+      console.log(makingContract);
+      console.log(NFTInfo[4].tokenId);
+      // makingContract.tokenURI(NFTInfo[4].tokenId).then(console.log);
+      const tokenURL = await makingContract.tokenURI(96);
+      console.log(tokenURL);
+      axios
+        .get(tokenURL)
+        .then((res) => {
+          setNFTInfo({
+              ...NFTInfo,
+              nft_imgURL: res.data,
+              nft_address: res.data,
+              types: res.data
+          });
+        })
+        .catch((err) => console.log(err));
+    }, [NFTInfo]);
 
 
     return(
@@ -59,9 +71,16 @@ export default function Mypage(props) {
             <div>
             <div className="mt-5 w-[340px] h-[270px] rounded-xl mb-5">
             <div className="border shadow-lg rounded-lg hover:scale-105 duration-300">
-            <img onClick={()=> NFTClick()} 
+            <img onClick={()=> NFTClick(
+                post.types,
+                post.nft_imgURL,
+                post.nft_address,
+                post.deposit,
+                post.rental,
+                post.description,
+            )} 
             className="w-full h-[200px] object-cover rounded-t-lg" 
-            src={NFTInfo.nft_imgURL}></img>
+            src={post.nft_imgURL}></img>
                 <p className="mt-10 flex flex-row justify-center items-center">{`임대종류 : ${post.types}`}</p>
                 <p className="mt-5 flex flex-row justify-center items-center">{`주소 : ${post.nft_address}`}</p>   
                 <p className="mt-5 flex flex-row justify-center items-center">{`보증금 : ${post.deposit}`}</p> 

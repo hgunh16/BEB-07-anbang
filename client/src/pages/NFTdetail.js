@@ -1,5 +1,5 @@
 // modules
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import ReactDOM from 'react-dom'
 import { useLocation } from 'react-router-dom';
@@ -16,16 +16,14 @@ export default function NFTdetail() {
     const location = useLocation();
 
     const [openModal, setOpenModal] = useState(false);
-
+    console.log(location)
     // const tokenID = location.state.tokenID; // 토큰 ID
-    const deposit = location.state.deposit; // 보증금
-    const image = location.state.nft_imgURL // 건물 이미지
-    const cost = location.state.rental // 월세 or 관리비
     const rentKinds = location.state.types // 임대 종류 전세 or 월세
+    const image = location.state.imgURL // 건물 이미지
+    const deposit = location.state.deposit; // 보증금
+    const address = location.state.address // 건물주소
+    const cost = location.state.rental // 월세 or 관리비
     const description = location.state.description // 설명
-    const address = location.state.nft_address // 건물주소
-    
-    console.log(location.state);
 
     return(
     <div className="w-full py-[10rem] px-4 bg-white absoulte">
