@@ -86,6 +86,8 @@ export default function Register() {
         description: mintNFT.description,
         types: mintNFT.types
       });
+      console.log(mintNFT)
+      mintNFT.nft_imgURL = url;
       return url;
     } catch (e) {
       console.log(e);
@@ -112,7 +114,7 @@ export default function Register() {
       console.log("빈 칸이 있으면 안됩니다");
       return false;
     }
-    submitImage();
+    await submitImage();
   };
 
   const handleInputValue = (key) => (e) => {
@@ -161,12 +163,12 @@ export default function Register() {
   async function postDB (event){
     event.preventDefault();
     console.log(mintNFT);
-    handleClickCreate();
+    await handleClickCreate();
     console.log(makingContract);
     const ContractWithSigner = await provider.send("eth_requestAccounts", []).then( _=>provider.getSigner()).then(signer=>
       makingContract.connect(signer)
     );
-    
+    console.log(mintNFT.nft_imgURL);
     await ContractWithSigner.mintNFT(ethereum.selectedAddress, mintNFT.nft_imgURL);
     let TokenId = await ContractWithSigner.viewLastTokenID()
     TokenId = Number(TokenId)+1;
