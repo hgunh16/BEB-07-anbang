@@ -13,15 +13,6 @@ export default function Mypage() {
 
     const [MyNFTInfo, setMyNFTInfo] = useState([])
 
-    useEffect(() => {
-        axios
-          .get("http://localhost:8080/mypage/:id", MyNFTInfo)
-          .then((result) => {
-            setMyNFTInfo([...result.data])
-          })
-          .catch((err) => console.log(err));
-      }, []);
-
       useEffect(()=>{
         if(localStorage.getItem('account') === null) {
             window.location.replace('http://localhost:3000/login')
