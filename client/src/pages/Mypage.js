@@ -23,7 +23,7 @@ export default function Mypage() {
     return(
 
         <div>
-            {MyNFTInfo.map((post) => (
+            {/* {MyNFTInfo.map((post) => ( */}
                 <div className="flex flex-col items-center">
                     <div className="flex flex-row mt-20">
                         <div className="flex items-center font-bold mr-5">보유 NFT 리스트</div>
@@ -32,11 +32,11 @@ export default function Mypage() {
                     
                     <div className="flex flex-row mt-20">
                         <div className="flex items-center font-bold mr-5">진행중인 계약</div>
-                            <p value={post}>진행중인 계약 1 </p>
+                            <p>진행중인 계약 : </p>
                             {/* 진행중인 계약 어떤 방식으로 넘어오는지 */}
                     </div>
                 </div>        
-            ))}
+            {/* ))} */}
 
         </div>
 
