@@ -8,12 +8,17 @@ import axios from "axios";
 // stylesheet
 import "../assets/css/main.css";
 import { Description } from "@ethersproject/properties";
+import {erc721_ABI, NFT_contractAddress} from '../contract/NFT_ABI';
+import {ethers} from "ethers"
 
 export default function Mypage(props) {
 
     const [NFTInfo, setNFTInfo] = useState([])
 
     const navigate = useNavigate();
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const makingContract = new ethers.Contract(NFT_contractAddress, erc721_ABI, provider);
 
     const NFTClick = () => {
         navigate("/NFTdetail", { state: {
@@ -22,7 +27,8 @@ export default function Mypage(props) {
             address: NFTInfo.nft_address,
             deposit: NFTInfo.deposit,
             rental: NFTInfo.rental,
-            description: NFTInfo.description
+            description: NFTInfo.description,
+            tokenId: NFTInfo.tokenId
         }});
       };
 
@@ -30,26 +36,32 @@ export default function Mypage(props) {
         axios
           .get("http://localhost:8080/estate", NFTInfo)
           .then((result) => {
+            // console.log(result.data);
             setNFTInfo([...result.data])
           })
           .catch((err) => console.log(err));
       }, []);
     
-
+      makingContract.tokenURI(96).then(e=>console.log(e));
     //ipfs 받아오는 이미지 url
-    useEffect(() => {
-        axios
-          .get(`http://making.infura-ipfs.io/ipfs/${NFTInfo.nft_imgURL}`)
-          .then((res) => {
-            setNFTInfo({
-                ...NFTInfo,
-                nft_imgURL: res.data,
-                nft_address: res.data,
-                types: res.data
-            });
-          })
-          .catch((err) => console.log(err));
-      }, [NFTInfo]);
+    useEffect(async () => {
+      console.log(makingContract);
+      console.log(NFTInfo[4].tokenId);
+      // makingContract.tokenURI(NFTInfo[4].tokenId).then(console.log);
+      const tokenURL = await makingContract.tokenURI(96);
+      console.log(tokenURL);
+      axios
+        .get(tokenURL)
+        .then((res) => {
+          setNFTInfo({
+              ...NFTInfo,
+              nft_imgURL: res.data,
+              nft_address: res.data,
+              types: res.data
+          });
+        })
+        .catch((err) => console.log(err));
+    }, [NFTInfo]);
 
     //   console.log(NFTInfo)
 
