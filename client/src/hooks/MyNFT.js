@@ -31,6 +31,21 @@ export default function Mypage(props) {
           })
           .catch((err) => console.log(err));
       }, []);
+
+    //ipfs 받아오는 이미지 url
+    useEffect(() => {
+        axios
+          .get(`https://ipfs.io/ipfs/${NFTInfo.nft_imgURL}`)
+          .then((result) => {
+            setNFTInfo({
+                ...NFTInfo,
+                nft_imgURL: result.data,
+                nft_address: result.data,
+                nft_type: result.data
+            });
+          })
+          .catch((err) => console.log(err));
+      }, [NFTInfo]);
     
 
     return(
