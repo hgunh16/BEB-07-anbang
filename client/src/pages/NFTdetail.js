@@ -21,9 +21,11 @@ export default function NFTdetail() {
     const deposit = location.state.deposit; // 보증금
     const image = location.state.nft_imgURL // 건물 이미지
     const cost = location.state.rental // 월세 or 관리비
-    const rentKinds = location.state.nft_types // 임대 종류 전세 or 월세
+    const rentKinds = location.state.types // 임대 종류 전세 or 월세
     const description = location.state.description // 설명
     const address = location.state.nft_address // 건물주소
+    
+    console.log(location.state);
 
     return(
     <div className="w-full py-[10rem] px-4 bg-white absoulte">

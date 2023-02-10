@@ -22,7 +22,8 @@ export default function Mypage(props) {
             address: NFTInfo.nft_address,
             deposit: NFTInfo.deposit,
             rental: NFTInfo.rental,
-            description: NFTInfo.description
+            description: NFTInfo.description,
+            // tokenID: NFTInfo.tokenID
         }});
       };
 
@@ -51,7 +52,6 @@ export default function Mypage(props) {
           .catch((err) => console.log(err));
       }, [NFTInfo]);
 
-    //   console.log(NFTInfo)
 
     return(
     <div className="flex flex-row">
