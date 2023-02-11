@@ -53,6 +53,7 @@ module.exports= {
         const token = authorization.split(' ')[1];
         const data =jwt.verify(token,process.env.ACCESS_SECRET);
         if(data){
+            //특약 , 계약할 부동산 토큰 아이디 입력
             const {ownerAgreement, ownerestateTokenId} = req.body;
       
                 if (!ownerAgreement || !ownerestateTokenId) {
@@ -82,26 +83,28 @@ module.exports= {
         const token = authorization.split(' ')[1];
         const data =jwt.verify(token,process.env.ACCESS_SECRET);
         if(data){
+            //tenantAgreement와 OwnerAgreement가 포함된 Estate 보여주기
             const contractEstate = await Estate.findOne({
                 include :[{
                     model : TenantAgreement,
-                    as: 'tenantAgreement',
                     where : {
-                        tenantestateTokenId
+                        tenantestateTokenId : "0xq9886jqwt"
                     },
                     attributes : ['tenantAgreement']
                 },
                 {
                     model : OwnerAgreement,
-                    as: 'ownerAgreement',
                     where : {
-                        ownerestateTokenId
+                        ownerestateTokenId : "0xq9886jqwt"
                     },
                     attributes : ['ownerAgreement']
                 }
                 ]
             })
+            // const updateEstate = await contractEstate.update({})
             return res.status(200).json({data: contractEstate, message : "contract Success"})
+            // 계약된 부동산 isSelling false 
+
         }
    }catch(err){
         console.error(err)

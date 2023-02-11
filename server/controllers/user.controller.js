@@ -118,7 +118,7 @@ module.exports ={
     
               res
               .status(200)
-              .json({data: {accessToken : accessToken}, message : 'login complete'})
+              .json({data: {accessToken : accessToken, userData}, message : 'login complete'})
               
             }
         }catch(err){
