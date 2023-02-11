@@ -1,36 +1,22 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
+import { useLocation } from "react-router";
 
 function ContractAgree() {
 
   const [contractInfo, setContractInfo] = useState([]);
   const [NFTInfo, setNFTInfo] = useState([])
 
-  // 매물정보 가져오기 
-  function getInfo(e){
-    e.preventDefault();
-    axios
-    .get("http://localhost:8080/estate/:id", NFTInfo)
-    .then((res)=>{
-      console.log(res);
-      setNFTInfo([...res.data]);
-    })
-    .catch((e) => console.log(e))
-  }
+  const location = useLocation();
+  const address = location.state.address
+  const agreement = location.state.agreement
+  const contractPeriod = location.state.contractPeriod
+  const deposit = location.state.deposit
+  const rental = location.state.rental
+  const types = location.state.types
 
-    // 계약서 get
-    function getContract(e) {
-      e.preventDefault();
-      axios
-        .post("http://localhost:8080/contract/tenantcheck", contractInfo)
-        .then((result) => {
-          console.log(result);
-          setContractInfo([result.data]);
-        })
-        .catch((e) => console.log(e));
-    }
+  console.log(location);
   
-
   const currentTime = new Date();
   const TwoyearTime = new Date(
     currentTime.setFullYear(currentTime.getFullYear() + 2)
@@ -99,29 +85,16 @@ function ContractAgree() {
           </div>
         </div>
       </div>
-      {contractInfo && contractInfo.map((post)=> (
       <div className="flex-auto justify-center w-full mx-auto">
-          {NFTInfo && NFTInfo.map((e)=> (
         <div className="bg-white p-10 flex flex-col w-full shadow-xl rounded-xl">
           <div className="flex items-center justify-center"></div>
           <form action="" class="w-full">
-            <div id="input" class="flex flex-col justify-center items-center w-full my-5">
-              <label for="username" class="text-black mb-2">
-                계약자 정보
-              </label>
-              <input
-                type="text"
-                id="username"
-                className="text-black border border-blue-700 bg-white max-w-sm font-mono text-sm py-3 px-4 w-[500px] rounded-md"
-              />
-            </div>
             <div id="input" class="flex flex-col justify-center items-center w-full my-5">              
               <label for="username" class="text-black mb-2">
-                임대주택 유형 : {e.types}
+                임대주택 유형 
               </label>
               <input
-                value={e.types}
-                onChange={getInfo}
+                value={types}
                 type="text"
                 id="username"
                 className="text-black border border-blue-700 bg-white max-w-sm font-mono text-sm py-3 px-4 w-[500px] rounded-md"
@@ -129,11 +102,10 @@ function ContractAgree() {
             </div>
             <div id="input" class="flex flex-col justify-center items-center w-full my-5">
               <label for="username" class="text-black mb-2">
-                계약기간 : {post.contractPeriod}
+                계약기간 
               </label>
               <input
-                value={contractInfo.contractPeriod}
-                onChange={getContract}
+                value={contractPeriod}
                 type="text"
                 id="username"
                 className="text-black border border-blue-700 bg-white max-w-sm font-mono text-sm py-3 px-4 w-[500px] rounded-md"
@@ -141,57 +113,57 @@ function ContractAgree() {
             </div>
             <div id="input" class="flex flex-col justify-center items-center w-full my-5">
               <label for="username" class="text-black mb-2">
-                보증금 : {e.deposit}
+                주소 
               </label>
               <input
-                value={e.deposit}
+                value={address}
+                type="text"
+                id="username"
+                className="text-black border border-blue-700 bg-white max-w-sm font-mono text-sm py-3 px-4 w-[500px] rounded-md"
+              />
+            </div>
+            <div id="input" class="flex flex-col justify-center items-center w-full my-5">
+              <label for="username" class="text-black mb-2">
+                보증금 
+              </label>
+              <input
+                value={deposit}
+                type="text"
+                id="username"
+                className="text-black border border-blue-700 bg-white max-w-sm font-mono text-sm py-3 px-4 w-[500px] rounded-md"
+              />
+            </div>
+            <div id="input" class="flex flex-col justify-center items-center w-full my-5">
+              <label for="username" class="text-black mb-2">
+                월세 
+              </label>
+              <input
+                value={rental}
+                type="text"
+                id="username"
+                className="text-black border border-blue-700 bg-white max-w-sm font-mono text-sm py-3 px-4 w-[500px] rounded-md"
+              />
+            </div>
 
-                type="text"
-                id="username"
-                className="text-black border border-blue-700 bg-white max-w-sm font-mono text-sm py-3 px-4 w-[500px] rounded-md"
-              />
-            </div>
             <div id="input" class="flex flex-col justify-center items-center w-full my-5">
               <label for="username" class="text-black mb-2">
-                월세 : {e.rental}
+                특약조항 
               </label>
               <input
-                value={e.rental}
-                onChange={getInfo}
+                value={agreement}
                 type="text"
                 id="username"
                 className="text-black border border-blue-700 bg-white max-w-sm font-mono text-sm py-3 px-4 w-[500px] rounded-md"
               />
-            </div>
-
-            <div id="input" class="flex flex-col justify-center items-center w-full my-5">
-              <label for="username" class="text-black mb-2">
-                특약조항 : {post.tenantAgree}
-              </label>
-              <input
-                value={post.tenantAgree}
-                onChange={getContract}
-                type="text"
-                id="username"
-                className="text-black border border-blue-700 bg-white max-w-sm font-mono text-sm py-3 px-4 w-[500px] rounded-md"
-              />
-            </div>
-            <div id="input" class="flex flex-col justify-center items-center w-full my-5">
-              <label for="username" class="text-black mb-2">
-                개인정보 동의서
-                <input type="checkbox" className="mx-1 "></input>
-              </label>
             </div>
           </form>
         </div>
-      ))}
       </div>
       
-    ))}
       <form>
         <button
           type="submit"
-          className="flex flex-col items-center justify-center mx-auto w-1/4 translate-x-full translate-y-1/2 rounded-md bg-black px-4 py-2 text-center font-medium capitalize tracking-wide text-white transition-colors duration-300 hover:bg-gray-500 focus:outline-none"
+          className="mt-20 mx-auto block w-1/4 translate-x-full translate-y-1/2 rounded-md bg-black px-4 py-2 text-center font-medium capitalize tracking-wide text-white transition-colors duration-300 hover:bg-gray-500 focus:outline-none"
         >
           계약합니다
         </button>

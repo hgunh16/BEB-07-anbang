@@ -47,7 +47,7 @@ export default function NFTdetail() {
                     <div id="userId">{`주소: ${address}`}</div>
                     <div id="cost">{`월세 ${cost}`}</div>
                     <div id="deposit">{`보증금 : ${deposit}`}</div>
-                    <div id="description">{`${description}`}</div>
+                    <div id="description">{`설명 : ${description}`}</div>
                     <div id="rentKinds">{`임대 종류 : ${rentKinds}`}</div>
                     <div className="flex flex-col items-end">
                         <button onClick={()=> {setOpenModal(true)}} 
