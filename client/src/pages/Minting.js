@@ -20,7 +20,7 @@ const projectId = '2LPkziQCCo7eL21iSYVGrg5Dqtu';   // <---------- your Infura Pr
 const projectSecret = '3e422f75dcf17f979f829ea39b13d5bc';  // <---------- your Infura Secret
 const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64');
 
-export default function Register() {
+export default function Register({userId, authorization}) {
 
     // useEffect(()=>{
     //     if(localStorage.getItem('account') === null) {
@@ -163,22 +163,22 @@ export default function Register() {
 
   async function postDB (event){
     event.preventDefault();
-    console.log(mintNFT);
+    // console.log(mintNFT);
     await handleClickCreate();
-    console.log(makingContract);
+    // console.log(makingContract);
     const ContractWithSigner = await provider.send("eth_requestAccounts", []).then( _=>provider.getSigner()).then(signer=>
       makingContract.connect(signer)
     );
-    console.log(mintNFT.nft_imgURL);
+    // console.log(mintNFT.nft_imgURL);
     await ContractWithSigner.mintNFT(ethereum.selectedAddress, mintNFT.nft_imgURL);
     let TokenId = await ContractWithSigner.viewLastTokenID()
     TokenId = Number(TokenId)+1;
     setMintNFT({...mintNFT,
-      tokenid: TokenId,
+      // tokenid: TokenId,
     })
     mintNFT.tokenid = TokenId;
-    console.log(TokenId);
-    console.log(mintNFT);
+    // console.log(TokenId);
+    // console.log(mintNFT);
     if(mintNFT.deposit && mintNFT.rental && mintNFT.description ) {
         axios.post("http://localhost:8080/estate/register", mintNFT)
         .then((res) =>{
