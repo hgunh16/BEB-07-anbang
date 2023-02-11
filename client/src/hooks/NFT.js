@@ -42,7 +42,6 @@ export default function NFT() {
           })
           .catch((err) => console.log(err));
       }, []);
-<<<<<<< HEAD
   
     //ipfs 받아오는 이미지 url
     useEffect(async () => {
@@ -62,29 +61,6 @@ export default function NFT() {
         })
         .catch((err) => console.log(err));
     }, [NFTInfo]);
-=======
-
-      console.log(NFTInfo)
-    
-      makingContract.tokenURI(96).then(e=>console.log(e));
-      //ipfs 받아오는 이미지 url
-      useEffect(() => {
-        async function fetchData() {
-          console.log(makingContract);
-          console.log(NFTInfo[4].tokenId);
-          // makingContract.tokenURI(NFTInfo[4].tokenId).then(console.log);
-          const tokenURL = await makingContract.tokenURI(96);
-          console.log(tokenURL);
-          axios
-            .get(`https://cors-anywhere.herokuapp.com/${tokenURL}`)
-            .then((res) => {
-              NFTInfo([...res.data]);
-            })
-            .catch((err) => console.log(err));
-        }
-        fetchData();
-      }, [NFTInfo]);
->>>>>>> 1147deeedd1f1c2864da4ce21abfe36e8d68e65d
 
     console.log(NFTInfo)
 

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { useLocation } from "react-router";
 
+import {erc20_ABI, erc20_contractAddress} from '../contract/NFT_ABI';
+
 function ContractAgree() {
 
   const [contractInfo, setContractInfo] = useState([]);
@@ -15,6 +17,11 @@ function ContractAgree() {
   const rental = location.state.rental
   const types = location.state.types
 
+  const ethereum = window.ethereum;
+  const provider = new ethers.providers.Web3Provider(window.ethereum)
+  const makingContract = new ethers.Contract(erc20_contractAddress, erc20_ABI, provider);
+  
+
   console.log(location);
   
   const currentTime = new Date();
@@ -22,6 +29,14 @@ function ContractAgree() {
     currentTime.setFullYear(currentTime.getFullYear() + 2)
   ); // 2년 후
   const realTime = new Date(); // 현재
+
+  async function vote(tokenId, voting){
+    const ContractWithSigner = await provider.send("eth_requestAccounts", []).then( _=>provider.getSigner()).then(signer=>
+      makingContract.connect(signer)
+    );
+    
+    await ContractWithSigner.vote(ethereum.selectedAddress, tokenId,voting);
+  }
 
   return (
     <div>
