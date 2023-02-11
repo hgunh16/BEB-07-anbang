@@ -21,13 +21,6 @@ const contract_type ={
   monthly: 1 //월세
 }
 
-const vote_Status = {
-  OK: 0,
-  NO: 1,
-  Wait: 2
-}
-
-
 // ERC20 토큰으로 ERC721 NFT를 mint
 router.post('/',async (req,res)=>{
     // const {address, image, types} = req.body;
@@ -42,16 +35,13 @@ router.post('/',async (req,res)=>{
     const maintenance = 1;
     const building_status = '정상'
     
-    const tokenid = 1;
+    const tokenId = 1;
     const nft_address = '0x6c475b4cb1e8cdedf69706cb2b88b75b764d482f'
 
     console.log('hello');
     res.send('hello');
     console.log("minting")
 
-    console.log(web3.eth.accounts)
-    web3.eth.getTransactionCount(server_address).then(console.log);
-    console.log(web3.eth.gasPrice);
     var txObj = {
       nonce: web3.eth.getTransactionCount(server_address),
       gasPrice: web3.eth.gasPrice,
@@ -59,13 +49,46 @@ router.post('/',async (req,res)=>{
       to: erc20ContractAddr,
       from: server_address,
       value: '',
-      data: erc20Contract.methods.proposal(landlord_address,lessee_address,landlord_special,lessee_special,contractType,deposit,maintenance,building_status,tokenid,nft_address).encodeABI(),
+      data: erc20Contract.methods.proposal(landlord_address,lessee_address,landlord_special,lessee_special,contractType,deposit,maintenance,building_status,tokenId,nft_address).encodeABI(),
     };
-
-    await erc20Contract.methods.proposal(landlord_address,lessee_address,landlord_special,lessee_special,contractType,deposit,maintenance,building_status,tokenid,nft_address);
-
+    const signedTx = await web3.eth.accounts.signTransaction(
+      txObj,
+      server_privatekey,
+    );
+    const approveResult = await web3.eth.sendSignedTransaction(
+      signedTx.rawTransaction,
+    );
+    console.log(approveResult);
+    erc20Contract.methods.getProposal(tokenId).call().then(console.log)
+    
 })
+router.post('/vote',async (req,res)=>{
 
+  const tokenId = 1;
+  const address = '0x23802188302BDFc1fdA5246211698227873D7Db2';
+  const vote = 0;
+
+  res.send('vote');
+  var txObj = {
+    nonce: web3.eth.getTransactionCount(server_address),
+    gasPrice: web3.eth.gasPrice,
+    gasLimit: 1000000,
+    to: erc20ContractAddr,
+    from: server_address,
+    value: '',
+    data: erc20Contract.methods.vote(address,tokenId,vote).encodeABI(),
+  };
+  const signedTx = await web3.eth.accounts.signTransaction(
+    txObj,
+    server_privatekey,
+  );
+  const approveResult = await web3.eth.sendSignedTransaction(
+    signedTx.rawTransaction,
+  );
+  console.log(approveResult);
+  erc20Contract.methods.getProposal(tokenId).call().then(console.log)
+  
+})
 // router.get('/hello', (req, res) => {
 //   console.log('hello');
 //   res.send('hello');

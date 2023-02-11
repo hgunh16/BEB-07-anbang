@@ -41,11 +41,9 @@ export default function Mypage(props) {
           })
           .catch((err) => console.log(err));
       }, []);
-    
-      makingContract.tokenURI(96).then(e=>console.log(e));
+  
     //ipfs 받아오는 이미지 url
     useEffect(async () => {
-      console.log(makingContract);
       console.log(NFTInfo[4].tokenId);
       // makingContract.tokenURI(NFTInfo[4].tokenId).then(console.log);
       const tokenURL = await makingContract.tokenURI(96);
