@@ -3,11 +3,12 @@ import {useNavigate} from "react-router-dom"
 import axios from "axios"
 
 
-const Login= ({setUserAuth}) => {
+function Login() {
   const navigate = useNavigate();
   const [account, setAccount] = useState({
     email:"",
-    password:""
+    password:"",
+    accessToken: ""
   })
 
   const handleInputValue = (key) => (e) => {
@@ -23,12 +24,12 @@ function handleSubmit(event){
   if(account.email && account.password){
       axios.post("http://localhost:8080/user/login", account)
       .then((result) => {
-          // console.log(result)
-          if(result.data.data.message===`login complete`) {
+          console.log(result.data)
+          if(result.data.status==="success") {
               setAccount({email: account.email, password: account.password, isConnected: "true"})}
-              setUserAuth(result.data.data.accessToken, result.data.data.userData.id)
               localStorage.setItem("account", JSON.stringify(account)); // account state 저장
               navigate("/main", { state: { account } })
+              console.log(account);
 
       })
       .then(() => {
