@@ -22,6 +22,7 @@ import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 function App() {
   const [isLogin, setIsLogin] = useState(false);
   const navigation = useNavigate();
+  
 
   const loginHandler = async () => {
     const dataToLogin = await axios.get("http://localhost:8080/user/login")
@@ -46,7 +47,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Preview />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login/>} />
         {/* { isLogin ? <Route path="/main" element={<Main isLogin={isLogin}/>} /> : <Route path="/login"/>} 로그인 되었을 때만 메인보이게 */}
         <Route path="/main" element={<Main />} />
         <Route path="/token" element={<Token />} />
