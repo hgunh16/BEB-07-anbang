@@ -31,9 +31,10 @@ function ContractAgree() {
     const result = window.confirm("위 계약조건을 확인하고 계약하시겠습니까?");
       if(result){
     alert("플랫폼에서 확인 절차를 거쳐서 계약이 완료됩니다.");
-    navigate('/main')
+    navigate('/mypage')
       }else{
     alert("취소되었습니다");
+    navigate('/main')
       }
   }
 
