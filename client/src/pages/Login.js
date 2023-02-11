@@ -7,7 +7,8 @@ function Login() {
   const navigate = useNavigate();
   const [account, setAccount] = useState({
     email:"",
-    password:""
+    password:"",
+    accessToken: ""
   })
 
   const handleInputValue = (key) => (e) => {
@@ -23,11 +24,12 @@ function handleSubmit(event){
   if(account.email && account.password){
       axios.post("http://localhost:8080/user/login", account)
       .then((result) => {
-          console.log(result.data.status)
+          console.log(result.data)
           if(result.data.status==="success") {
               setAccount({email: account.email, password: account.password, isConnected: "true"})}
               localStorage.setItem("account", JSON.stringify(account)); // account state 저장
               navigate("/main", { state: { account } })
+              console.log(account);
 
       })
       .then(() => {
