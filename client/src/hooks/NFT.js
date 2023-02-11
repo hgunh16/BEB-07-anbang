@@ -14,7 +14,8 @@ import {ethers} from "ethers"
 export default function NFT() {
 
     const [NFTInfo, setNFTInfo] = useState([])
-
+    const [urlInfo, setUrlInfo] = useState()
+ 
     const navigate = useNavigate();
 
 
@@ -42,25 +43,30 @@ export default function NFT() {
           })
           .catch((err) => console.log(err));
       }, []);
+
+      console.log(NFTInfo)
     
       makingContract.tokenURI(96).then(e=>console.log(e));
     
       //ipfs 받아오는 이미지 url
-    useEffect(async () => {
-      console.log(makingContract);
-      console.log(NFTInfo[4].tokenId);
-      // makingContract.tokenURI(NFTInfo[4].tokenId).then(console.log);
-      const tokenURL = await makingContract.tokenURI(96);
-      console.log(tokenURL);
-      axios
-        .get(`https://cors-anywhere.herokuapp.com/${tokenURL}`)
-        .then((res) => {
-          setNFTInfo(res.data);
-        })
-        .catch((err) => console.log(err));
-    }, [NFTInfo]);
+      useEffect(() => {
+        async function fetchData() {
+          console.log(makingContract);
+          console.log(NFTInfo[4].tokenId);
+          // makingContract.tokenURI(NFTInfo[4].tokenId).then(console.log);
+          const tokenURL = await makingContract.tokenURI(96);
+          console.log(tokenURL);
+          axios
+            .get(`https://cors-anywhere.herokuapp.com/${tokenURL}`)
+            .then((res) => {
+              setUrlInfo(res.data);
+            })
+            .catch((err) => console.log(err));
+        }
+        fetchData();
+      }, [urlInfo]);
 
-    console.log(NFTInfo) // 여기까진 data 넘어옴 location.state가 왜 null? 
+    console.log(urlInfo) // 여기까진 data 넘어옴 location.state가 왜 null? 
 
     return(
     <div className="flex flex-row">
