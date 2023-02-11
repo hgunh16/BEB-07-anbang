@@ -64,13 +64,13 @@ export default function NFT() {
         fetchData();
       }, [NFTInfo]);
 
-    console.log(NFTInfo) // 여기까진 data 넘어옴 location.state가 왜 null? 
+    console.log(NFTInfo)
 
     return(
-    <div className="flex flex-row">
+    <div className="grid grid-flow-row gap-10 text-neutral-600 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {NFTInfo && NFTInfo.map((post)=> (
             <div>
-            <div className="mt-5 w-[340px] h-[270px] rounded-xl mb-5">
+            <div className="px-6 my-8 mt-20 w-[340px] h-[270px] rounded-xl mb-5">
             <div className="border shadow-lg rounded-lg hover:scale-105 duration-300">
             <img onClick={()=> NFTClick(
                 post.types,
@@ -82,10 +82,10 @@ export default function NFT() {
             )} 
             className="w-full h-[200px] object-cover rounded-t-lg" 
             src={post.nft_imgURL}></img>
-                <p className="mt-10 flex flex-row justify-center items-center">{`임대종류 : ${post.types}`}</p>
+                <p className="mt-5 flex flex-row justify-center items-center">{`임대종류 : ${post.types}`}</p>
                 <p className="mt-5 flex flex-row justify-center items-center">{`주소 : ${post.nft_address}`}</p>   
                 <p className="mt-5 flex flex-row justify-center items-center">{`보증금 : ${post.deposit}`}</p> 
-                <p className="mt-5 flex flex-row justify-center items-center">{`월세 : ${post.rental}`}</p> 
+                <p className="mt-5 mb-3 flex flex-row justify-center items-center">{`월세 : ${post.rental}`}</p> 
             </div>
         </div>
         </div>

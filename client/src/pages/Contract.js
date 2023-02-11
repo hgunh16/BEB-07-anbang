@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ContractAgree from "./ContractAgree";
 import { Link } from "react-router-dom";
 
@@ -11,21 +11,16 @@ function Contract() {
     contractPeriod: "", // 계약기간
   });
 
-  const [NFTInfo, setNFTInfo] = useState([])
+  const location = useLocation();
+  console.log(location)
 
   const navigate = useNavigate();
 
-  // 매물정보 가져오기 
-  function getInfo(e){
-    e.preventDefault();
-    axios
-    .get("http://localhost:8080/estate/:id", NFTInfo)
-    .then((res)=>{
-      console.log(res);
-      setNFTInfo([...res.data]);
-    })
-    .catch((e) => console.log(e))
-  }
+  const types = location.state.types // 전세 or 월세
+  const address = location.state.address
+  const deposit = location.state.deposit
+  const rental = location.state.rental
+  const description = location.state.description
 
 
   // 특약사항 post
@@ -110,13 +105,12 @@ function Contract() {
             </p>
           </div>
         </div>
-      </div>
-      {NFTInfo && NFTInfo.map((post)=> ( 
+      </div> 
       <div className="mt-5 flex flex-col items-center justify-center w-full mx-auto">
         <div className="bg-white p-10 flex flex-col items-center justify-center w-full shadow-xl rounded-xl">
           <div className="flex flex-col items-center justify-center"></div>
           <form action="" class="w-full">
-            <div id="input" class="flex flex-col items-center w-full my-5">
+            {/* <div id="input" class="flex flex-col items-center w-full my-5">
               <label for="username" class="text-gray-500 mb-2">
                 계약자 ID
               </label>
@@ -125,13 +119,13 @@ function Contract() {
                 id="username"
                 className="text-black border border-blue-700 bg-white max-w-sm font-mono text-sm py-3 px-4 w-[500px] rounded-md"
               />
-            </div>
+            </div> */}
             <div id="input" class="flex flex-col justify-center items-center w-full my-5">
               <label for="username" class="text-black mb-2">
-                주소 : {post.address}
+                주소
               </label>
               <input
-                onChange={getInfo}
+                value={address}
                 type="text"
                 id="username"
                 className="text-black border border-blue-700 bg-white max-w-sm font-mono text-sm py-3 px-4 w-[500px] rounded-md"
@@ -139,11 +133,10 @@ function Contract() {
             </div>
             <div id="input" class="flex flex-col justify-center items-center w-full my-5">
               <label for="username" class="text-black mb-2">
-                임대주택 유형 : {post.types}
+                임대주택 유형 
               </label>
               <input
-                onChange={getInfo}
-                value={post.types}
+                value={types}
                 type="text"
                 id="username"
                 className="text-black border border-blue-700 bg-white max-w-sm font-mono text-sm py-3 px-4 w-[500px] rounded-md"
@@ -157,16 +150,17 @@ function Contract() {
                 value={agreement.contractPeriod}
                 onChange={handleInputValue("contractPeriod")}
                 type="text"
+                placeholder="2023.01.01~2025.01.01"
                 id="username"
                 className="text-black border border-blue-700 bg-white max-w-sm font-mono text-sm py-3 px-4 w-[500px] rounded-md"
               />
             </div>
             <div id="input" class="flex flex-col justify-center items-center w-full my-5">
               <label for="username" class="text-black mb-2">
-                보증금 : {post.deposit}
+                보증금
               </label>
               <input
-                onChange={getInfo}
+                value={deposit}
                 type="text"
                 id="username"
                 className="text-black border border-blue-700 bg-white max-w-sm font-mono text-sm py-3 px-4 w-[500px] rounded-md"
@@ -175,10 +169,22 @@ function Contract() {
 
             <div id="input" class="flex flex-col justify-center items-center w-full my-5">
               <label for="username" class="text-black mb-2">
-                월세 : {post.rental}
+                월세
               </label>
               <input
-                onChange={getInfo}
+                value={rental}
+                type="text"
+                id="username"
+                className="text-black border border-blue-700 bg-white max-w-sm font-mono text-sm py-3 px-4 w-[500px] rounded-md"
+              />
+            </div>
+
+            <div id="input" class="flex flex-col justify-center items-center w-full my-5">
+              <label for="username" class="text-black mb-2">
+                설명
+              </label>
+              <input
+                value={description}
                 type="text"
                 id="username"
                 className="text-black border border-blue-700 bg-white max-w-sm font-mono text-sm py-3 px-4 w-[500px] rounded-md"
@@ -205,9 +211,17 @@ function Contract() {
           </form>
         </div>
       </div>
-    ))}
+
       <form onSubmit={handleSubmit}>
-        <Link to="/mypage" component={ContractAgree}>
+        <Link to={`/mypage`} state={{
+          address: address,
+          deposit: deposit,
+          types: types,
+          description: description,
+          rental: rental,
+          agreement: agreement.tenantAgreement,
+          contractPeriod: agreement.contractPeriod
+        }}>
           <button
             type="submit"
             onClick={handleSubmit}
