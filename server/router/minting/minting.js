@@ -89,37 +89,5 @@ router.post('/vote',async (req,res)=>{
   erc20Contract.methods.getProposal(tokenId).call().then(console.log)
   
 })
-// router.get('/hello', (req, res) => {
-//   console.log('hello');
-//   res.send('hello');
-// });
-
-async function approve_erc20(address, privateKey) {
-    var txObj = {
-      nonce: web3.eth.getTransactionCount(address),
-      gasPrice: web3.eth.gasPrice,
-      gasLimit: 1000000,
-      to: erc20ContractAddr,
-      from: address,
-      value: '',
-      data: erc20Contract.methods.approve(erc721ContractAddr, '100').encodeABI(),
-    };
-  
-    try {
-      const signedTx = await web3.eth.accounts.signTransaction(
-        txObj,
-        privateKey,
-      );
-      const approveResult = await web3.eth.sendSignedTransaction(
-        signedTx.rawTransaction,
-      );
-  
-      console.log(approveResult);
-      return approveResult;
-    } catch (e) {
-      console.log(e);
-      return e;
-    }
-  }
 
 module.exports = router;

@@ -44,23 +44,23 @@ export default function NFT() {
       }, []);
   
     //ipfs 받아오는 이미지 url
-    useEffect(async () => {
-      console.log(NFTInfo[4].tokenId);
-      // makingContract.tokenURI(NFTInfo[4].tokenId).then(console.log);
-      const tokenURL = await makingContract.tokenURI(96);
-      console.log(tokenURL);
-      axios
-        .get(tokenURL)
-        .then((res) => {
-          setNFTInfo({
-              ...NFTInfo,
-              nft_imgURL: res.data,
-              nft_address: res.data,
-              types: res.data
-          });
-        })
-        .catch((err) => console.log(err));
-    }, [NFTInfo]);
+    // useEffect(async () => {
+    //   console.log(NFTInfo[4].tokenId);
+    //   // makingContract.tokenURI(NFTInfo[4].tokenId).then(console.log);
+    //   const tokenURL = await makingContract.tokenURI(96);
+    //   console.log(tokenURL);
+    //   axios
+    //     .get(tokenURL)
+    //     .then((res) => {
+    //       setNFTInfo({
+    //           ...NFTInfo,
+    //           nft_imgURL: res.data,
+    //           nft_address: res.data,
+    //           types: res.data
+    //       });
+    //     })
+    //     .catch((err) => console.log(err));
+    // }, [NFTInfo]);
 
     console.log(NFTInfo)
 

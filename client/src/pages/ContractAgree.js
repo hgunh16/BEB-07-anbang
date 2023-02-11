@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { useLocation, useNavigate } from "react-router";
 
+import {ethers} from "ethers"
 
-import {erc20_ABI, erc20_contractAddress} from '../contract/NFT_ABI';
+import {erc20_ABI, erc20_contractAddress} from '../contract/ERC20_ABI';
+
 
 function ContractAgree() {
 
@@ -22,7 +24,7 @@ function ContractAgree() {
   const ethereum = window.ethereum;
   const provider = new ethers.providers.Web3Provider(window.ethereum)
   const makingContract = new ethers.Contract(erc20_contractAddress, erc20_ABI, provider);
-  
+
 
   console.log(location);
 
@@ -34,29 +36,32 @@ function ContractAgree() {
   ); // 2년 후
   const realTime = new Date(); // 현재
 
-<<<<<<< HEAD
   async function vote(tokenId, voting){
     const ContractWithSigner = await provider.send("eth_requestAccounts", []).then( _=>provider.getSigner()).then(signer=>
       makingContract.connect(signer)
     );
-    
-    await ContractWithSigner.vote(ethereum.selectedAddress, tokenId,voting);
+    console.log(makingContract)
+    const _vote = await ContractWithSigner.vote(ethereum.selectedAddress, tokenId,voting);
+    console.log(_vote);
   }
 
-=======
-  function confirm(){
+
+  async function confirm(event){
+    event.preventDefault();
     const result = window.confirm("위 계약조건을 확인하고 계약하시겠습니까?");
-      if(result){
-    alert("플랫폼에서 확인 절차를 거쳐서 계약이 완료됩니다.");
-    navigate('/mypage')
-      }else{
-    alert("취소되었습니다");
-    navigate('/main')
-      }
+    if(result){
+      await vote(1,0);
+      alert("플랫폼에서 확인 절차를 거쳐서 계약이 완료됩니다.");
+      navigate('/mypage')
+    }else{
+      await vote(1,1);
+      alert("취소되었습니다");
+      navigate('/main')
+    }
   }
 
 
->>>>>>> 94fc90dddaf7d3e6a397bd046e17c5484f978a24
+
   return (
     <div>
       <div className="flex mt-20">
@@ -196,6 +201,7 @@ function ContractAgree() {
       
       <form>
         <button
+          type="submit"
           onClick={confirm}
           className="mt-20 mx-auto block w-1/4 translate-x-full translate-y-1/2 rounded-md bg-black px-4 py-2 text-center font-medium capitalize tracking-wide text-white transition-colors duration-300 hover:bg-gray-500 focus:outline-none"
         >
