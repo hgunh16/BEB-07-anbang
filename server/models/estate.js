@@ -56,7 +56,7 @@ class Estate extends Sequelize.Model{
         db.Estate.hasOne(db.Dmroom, {foreignKey : 'estateId', sourceKey : 'id'})
         db.Estate.hasMany(db.Report, {foreignKey : 'reportId', sourceKey : 'id'})
         db.Estate.hasMany(db.OwnerAgreement, {foreignKey:'ownerestateTokenId', sourceKey:'tokenId'})
-        db.Estate.hasOne(db.TenantAgreement, {foreignKey:'tenantestateTokenId', sourceKey: 'tokenId'})
+        db.Estate.hasMany(db.TenantAgreement, {foreignKey:'tenantestateTokenId', sourceKey: 'tokenId'})
     };
 }
 

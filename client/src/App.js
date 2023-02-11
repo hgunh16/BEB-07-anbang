@@ -23,6 +23,14 @@ function App() {
   const [isLogin, setIsLogin] = useState(false);
   const navigation = useNavigate();
 
+  const [authorization, setAuthorization] = useState("");
+  const [userId, setUserId] = useState("");
+  const setUserAuth = (token, id) => {
+    setAuthorization(token);
+    setUserId(id);
+  }
+
+
   const loginHandler = async () => {
     const dataToLogin = await axios.get("http://localhost:8080/user/login")
     .then(result=>result.data)
@@ -46,12 +54,12 @@ function App() {
       <Routes>
         <Route path="/" element={<Preview />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login setUserAuth={setUserAuth} />} />
         {/* { isLogin ? <Route path="/main" element={<Main isLogin={isLogin}/>} /> : <Route path="/login"/>} 로그인 되었을 때만 메인보이게 */}
         <Route path="/main" element={<Main />} />
         <Route path="/token" element={<Token />} />
         <Route path="/NFTdetail" element={<NFTdetail />} />
-        <Route path="/mypage" element={<Mypage />} />
+        <Route path="/mypage" element={<Mypage userId={userId} authorization={authorization} />} />
         <Route path="/message" element={<Message />} />
         <Route path="/minting" element={<Minting />} />
         <Route path="/contract" element={<Contract />} />

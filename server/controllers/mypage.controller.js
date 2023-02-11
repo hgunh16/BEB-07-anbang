@@ -5,6 +5,7 @@ const {Op} =require('sequelize');
 module.exports ={
 
     mypage : async(req,res,next)=>{
+      // 로그인 검증
       const authorization = req.headers['authorization'];
       // console.log(authorization)
       if (!authorization) {
@@ -14,14 +15,16 @@ module.exports ={
         try {
           const token = authorization.split(' ')[1];
           const data = jwt.verify(token, process.env.ACCESS_SECRET);
-    
-          if(data){
+
+          //accessToken이 있는 경우, accessToken내 갖고 있는 user.Id로 OwnedEstate조회
+          // if(data)
+          {
             const ownedEstate = await Estate.findAll({
                 where :{
                     owner : data.id,
                 }
             });
-
+            //contractor
             const contractingEstate = await Estate.findAll({
               where : {
                 contractor : {
@@ -29,7 +32,7 @@ module.exports ={
                 }
               }
             })
-            return res.status(200).json({ownedEstate,contractingEstate});
+             return res.status(200).json({ownedEstate,contractingEstate});
           }
           
           

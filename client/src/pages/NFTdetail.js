@@ -1,8 +1,8 @@
 // modules
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import ReactDOM from 'react-dom'
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import NFTList from "../components/NFTList";
 import axios from "axios"
 import Report from "../hooks/Report";
@@ -12,18 +12,31 @@ import Modal from 'react-modal';
 import "../assets/css/main.css";
 
 export default function NFTdetail() {
-
+    
     const location = useLocation();
-
     const [openModal, setOpenModal] = useState(false);
+    console.log(location)
+
 
     // const tokenID = location.state.tokenID; // 토큰 ID
+    const rentKinds = location.state.types // 임대 종류 전세 or 월세
+    const image = location.state.imgURL // 건물 이미지
     const deposit = location.state.deposit; // 보증금
-    const image = location.state.nft_imgURL // 건물 이미지
+    const address = location.state.address // 건물주소
     const cost = location.state.rental // 월세 or 관리비
-    const rentKinds = location.state.nft_types // 임대 종류 전세 or 월세
     const description = location.state.description // 설명
-    const address = location.state.nft_address // 건물주소
+
+    const navigate = useNavigate();
+
+    const contractClick = (types, address, deposit, rental, description) => {
+        navigate("/Contract", { state: {
+            types: types,
+            address: address,
+            deposit: deposit,
+            rental: rental,
+            description: description,
+        }});
+      };
 
     return(
     <div className="w-full py-[10rem] px-4 bg-white absoulte">
@@ -34,7 +47,7 @@ export default function NFTdetail() {
                     <div id="userId">{`주소: ${address}`}</div>
                     <div id="cost">{`월세 ${cost}`}</div>
                     <div id="deposit">{`보증금 : ${deposit}`}</div>
-                    <div id="description">{`${description}`}</div>
+                    <div id="description">{`설명 : ${description}`}</div>
                     <div id="rentKinds">{`임대 종류 : ${rentKinds}`}</div>
                     <div className="flex flex-col items-end">
                         <button onClick={()=> {setOpenModal(true)}} 
@@ -43,9 +56,14 @@ export default function NFTdetail() {
         </div>
                 </div>
                 <div className="mt-10 flex flex-row items-center">
-                        <Link to = "/contract">
-                                <a className="mx-10 inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">계약하기</a>
-                        </Link>
+                        <a onClick={()=> contractClick(
+                            rentKinds,
+                            address,
+                            deposit,
+                            cost,
+                            description,
+                        )}
+                        className="mx-10 inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">계약하기</a>
                         <Link to = "/message">
                                 <a className="mx-10 inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">연락하기</a>
                         </Link>
