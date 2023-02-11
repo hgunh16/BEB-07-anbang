@@ -2,7 +2,7 @@
 import {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import ReactDOM from 'react-dom'
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import NFTList from "../components/NFTList";
 import axios from "axios"
 import Report from "../hooks/Report";
@@ -26,6 +26,18 @@ export default function NFTdetail() {
     const cost = location.state.rental // 월세 or 관리비
     const description = location.state.description // 설명
 
+    const navigate = useNavigate();
+
+    const contractClick = (types, address, deposit, rental, description) => {
+        navigate("/Contract", { state: {
+            types: types,
+            address: address,
+            deposit: deposit,
+            rental: rental,
+            description: description,
+        }});
+      };
+
     return(
     <div className="w-full py-[10rem] px-4 bg-white absoulte">
         <div>
@@ -44,9 +56,14 @@ export default function NFTdetail() {
         </div>
                 </div>
                 <div className="mt-10 flex flex-row items-center">
-                        <Link to = "/contract">
-                                <a className="mx-10 inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">계약하기</a>
-                        </Link>
+                        <a onClick={()=> contractClick(
+                            rentKinds,
+                            address,
+                            deposit,
+                            cost,
+                            description,
+                        )}
+                        className="mx-10 inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">계약하기</a>
                         <Link to = "/message">
                                 <a className="mx-10 inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">연락하기</a>
                         </Link>
