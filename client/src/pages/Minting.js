@@ -83,7 +83,6 @@ export default function Register({userId, authorization}) {
       setMintNFT({
         nft_address: mintNFT.nft_address,
         nft_imgURL: url,
-        types: mintNFT.types,
         description: mintNFT.description,
         types: mintNFT.types
       });
@@ -113,6 +112,7 @@ export default function Register({userId, authorization}) {
       imgFile == null
     ) {
       console.log("빈 칸이 있으면 안됩니다");
+      alert("빈 칸이 있으면 안됩니다")
       return false;
     }
     await submitImage();
@@ -158,7 +158,7 @@ export default function Register({userId, authorization}) {
         });
     }
   }
-
+  // console.log(mintNFT)
   // 매물관련 DB post
 
   async function postDB (event){
@@ -196,6 +196,8 @@ export default function Register({userId, authorization}) {
     }
   }
 
+  console.log(mintNFT);
+  // mintNFT.types 에 로그인한 이메일이 들어가있음
 
   return (
     <div className="mb-6 pt-4 mt-20">
