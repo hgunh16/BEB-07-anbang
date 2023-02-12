@@ -4,6 +4,7 @@ import {Link} from "react-router-dom";
 import ReactDOM from 'react-dom'
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
+import ipfs from "ipfs-http-client";
 
 // stylesheet
 import "../assets/css/main.css";
@@ -43,27 +44,33 @@ export default function NFT() {
           .catch((err) => console.log(err));
       }, []);
   
+
+    // makingContract.tokenURI(96).then(e=>console.log(e));
     //ipfs 받아오는 이미지 url
-    // useEffect(async () => {
-    //   console.log(NFTInfo[4].tokenId);
-    //   // makingContract.tokenURI(NFTInfo[4].tokenId).then(console.log);
-    //   const tokenURL = await makingContract.tokenURI(96);
-    //   console.log(tokenURL);
-    //   axios
-    //     .get(tokenURL)
-    //     .then((res) => {
-    //       setNFTInfo({
-    //           ...NFTInfo,
-    //           nft_imgURL: res.data,
-    //           nft_address: res.data,
-    //           types: res.data
-    //       });
-    //     })
-    //     .catch((err) => console.log(err));
-    // }, [NFTInfo]);
+    useEffect(() => {
+      async function fetchData() {
+        // console.log(makingContract);
+        // console.log(NFTInfo[4].tokenId);
+        // makingContract.tokenURI(NFTInfo[4].tokenId).then(console.log);
+        const tokenURL = await makingContract.tokenURI(96);
+        console.log(tokenURL);
+        axios
+          .get(`https://cors-anywhere.herokuapp.com/${tokenURL}`)
+          .then((res) => {
+            setNFTInfo(prevNFTInfo => [...prevNFTInfo, {
+              nft_imgURL: res.data.imgFile,
+              types: res.data.types,
+              nft_address: res.data.nft_address
+            }]);
+          })
+          .catch((err) => console.log(err));
+      }
+      fetchData();
+    }, []);
 
-    console.log(NFTInfo)
+  console.log(NFTInfo)
 
+      
     return(
     <div className="grid grid-flow-row gap-10 text-neutral-600 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {NFTInfo && NFTInfo.map((post)=> (

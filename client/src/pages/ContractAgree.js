@@ -14,6 +14,8 @@ function ContractAgree() {
 
 
   const location = useLocation();
+  console.log(location);
+
   const address = location.state.address
   const agreement = location.state.agreement
   const contractPeriod = location.state.contractPeriod
