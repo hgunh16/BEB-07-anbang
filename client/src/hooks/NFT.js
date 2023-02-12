@@ -21,7 +21,7 @@ export default function NFT() {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const makingContract = new ethers.Contract(NFT_contractAddress, erc721_ABI, provider);
 
-    const NFTClick = (types, imgURL, address, deposit, rental, description) => {
+    const NFTClick = (types, imgURL, address, deposit, rental, description,tokenId) => {
         navigate("/NFTdetail", { state: {
             types: types,
             imgURL: imgURL,
@@ -29,6 +29,7 @@ export default function NFT() {
             deposit: deposit,
             rental: rental,
             description: description,
+            tokenId: tokenId
         }});
       };
 
@@ -77,6 +78,7 @@ export default function NFT() {
                 post.deposit,
                 post.rental,
                 post.description,
+                post.tokenId
             )} 
             className="w-full h-[200px] object-cover rounded-t-lg" 
             src={post.nft_imgURL}></img>

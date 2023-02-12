@@ -7,7 +7,6 @@ const { server_address, server_privatekey } = process.env;
 
 const { erc721_ABI,  } = require('../../contract/web3js/NFT_ABI');
 const { erc20_ABI, erc20ContractAddr } = require('../../contract/web3js/ABI');
-const caver = new Caver('https://api.baobab.klaytn.net:8651/'); //ganache provider
 
 const Web3 = require('web3');
 
@@ -61,33 +60,6 @@ router.post('/',async (req,res)=>{
     console.log(approveResult);
     erc20Contract.methods.getProposal(tokenId).call().then(console.log)
     
-})
-router.post('/vote',async (req,res)=>{
-
-  const tokenId = 1;
-  const address = '0x23802188302BDFc1fdA5246211698227873D7Db2';
-  const vote = 0;
-
-  res.send('vote');
-  var txObj = {
-    nonce: web3.eth.getTransactionCount(server_address),
-    gasPrice: web3.eth.gasPrice,
-    gasLimit: 1000000,
-    to: erc20ContractAddr,
-    from: server_address,
-    value: '',
-    data: erc20Contract.methods.vote(address,tokenId,vote).encodeABI(),
-  };
-  const signedTx = await web3.eth.accounts.signTransaction(
-    txObj,
-    server_privatekey,
-  );
-  const approveResult = await web3.eth.sendSignedTransaction(
-    signedTx.rawTransaction,
-  );
-  console.log(approveResult);
-  erc20Contract.methods.getProposal(tokenId).call().then(console.log)
-  
 })
 
 module.exports = router;
