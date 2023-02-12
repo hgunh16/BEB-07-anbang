@@ -4,37 +4,49 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ContractAgree from "./ContractAgree";
 import { Link } from "react-router-dom";
 
-function Contract({userId, authorization}) {
+import { ethers } from "ethers";
+
+import {erc20_ABI, erc20_contractAddress} from '../contract/ERC20_ABI';
+
+function Contract() {
   const [agreement, setAgreement] = useState({
     tenantAgreement: "", // 특약조항
     contractPeriod: "", // 계약기간
   });
 
+  const ethereum = window.ethereum;
+  const provider = new ethers.providers.Web3Provider(window.ethereum)
+  const makingContract = new ethers.Contract(erc20_contractAddress, erc20_ABI, provider);
 
   const location = useLocation();
-  console.log(location)
-
   const navigate = useNavigate();
 
+  const tokenId = location.state.tokenId
   const types = location.state.types // 전세 or 월세
   const address = location.state.address
   const deposit = location.state.deposit
   const rental = location.state.rental
   const description = location.state.description
-
+  console.log(location)
 
   // 특약사항 post
   function handleSubmit(e) {
     e.preventDefault();
-    axios
-      .post("http://localhost:8080/contract/tenantcheck", agreement,
-      { headers: { authorization: `Bearer ${authorization}` } })
+    const landlord_address=ethereum.selectedAddress;
+    console.log(tokenId);
+    axios.post("http://localhost:8080/contract/make", {landlord_address, deposit, types, agreement, tokenId})
+    .then(e=>{
+      axios
+      .post("http://localhost:8080/contract/tenantcheck", agreement)
       .then((result) => {
         console.log(result);
         setAgreement({ tenantAgreement: agreement.tenantAgreement });
         navigate("/mypage");
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.log(e));}
+    )
+
+    
   }
 
 
@@ -222,7 +234,8 @@ function Contract({userId, authorization}) {
           description: description,
           rental: rental,
           agreement: agreement.tenantAgreement,
-          contractPeriod: agreement.contractPeriod
+          contractPeriod: agreement.contractPeriod,
+          tokenId: tokenId
         }}>
           <button
             type="submit"

@@ -24,7 +24,12 @@ function App() {
   const navigation = useNavigate();
   
 
-  const [authorization, setAuthorization] = useState(""); //authrization 에 accessToken들어오게끔
+  const [authorization, setAuthorization] = useState({
+    accessToken: "",
+    id : ""
+  });
+
+  // const [authorization, setAuthorization] = useState(""); //authrization 에 accessToken들어오게끔
   const [userId, setUserId] = useState(""); // userId 값
   const setUserAuth = (token, id) => {
     setAuthorization(token);

@@ -56,7 +56,7 @@ app.use(cors({
 
 // app.use('/', apiRouter);
 
-app.use('/', api);
+// app.use('/', api);
 app.use('/dev', devRouter);
 app.use('/user', router.userRouter);
 app.use('/estate', router.estateRouter);

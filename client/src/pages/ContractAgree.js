@@ -47,7 +47,6 @@ function ContractAgree() {
     console.log(_vote);
   }
 
-
   async function confirm(event){
     event.preventDefault();
     const result = window.confirm("위 계약조건을 확인하고 계약하시겠습니까?");

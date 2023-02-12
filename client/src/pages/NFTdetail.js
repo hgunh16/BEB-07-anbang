@@ -18,7 +18,7 @@ export default function NFTdetail() {
     console.log(location)
 
 
-    // const tokenID = location.state.tokenID; // 토큰 ID
+    const tokenId = location.state.tokenId; // 토큰 ID
     const rentKinds = location.state.types // 임대 종류 전세 or 월세
     const image = location.state.imgURL // 건물 이미지
     const deposit = location.state.deposit; // 보증금
@@ -28,13 +28,14 @@ export default function NFTdetail() {
 
     const navigate = useNavigate();
 
-    const contractClick = (types, address, deposit, rental, description) => {
+    const contractClick = (types, address, deposit, rental, description,tokenId) => {
         navigate("/Contract", { state: {
             types: types,
             address: address,
             deposit: deposit,
             rental: rental,
             description: description,
+            tokenId: tokenId
         }});
       };
 
@@ -62,6 +63,7 @@ export default function NFTdetail() {
                             deposit,
                             cost,
                             description,
+                            tokenId
                         )}
                         className="mx-10 inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">계약하기</a>
                         <Link to = "/message">
