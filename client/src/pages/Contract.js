@@ -6,10 +6,10 @@ import { Link } from "react-router-dom";
 
 function Contract({userId, authorization}) {
   const [agreement, setAgreement] = useState({
-    // ownerAgreement: "", // 임대인 특약조항
-    tenantAgreement: "", // 임차인 특약조항
+    tenantAgreement: "", // 특약조항
     contractPeriod: "", // 계약기간
   });
+
 
   const location = useLocation();
   console.log(location)
@@ -36,6 +36,7 @@ function Contract({userId, authorization}) {
       })
       .catch((e) => console.log(e));
   }
+
 
   const handleInputValue = (key) => (e) => {
     setAgreement({ ...agreement, [key]: e.target.value });

@@ -24,11 +24,6 @@ function App() {
   const navigation = useNavigate();
   
 
-  const [authorization, setAuthorization] = useState({
-    accessToken: "",
-    id : ""
-  });
-
   const [authorization, setAuthorization] = useState(""); //authrization 에 accessToken들어오게끔
   const [userId, setUserId] = useState(""); // userId 값
   const setUserAuth = (token, id) => {
@@ -53,14 +48,6 @@ function App() {
     setIsLogin(true);
   }
 
-  const getToken = async () => {
-    const accessInfo = await axios.get("http://localhost:8080/user/login")
-    .then((result)=> {
-      setAuthorization({...result.data})
-    })
-    .catch(console.log);
-
-  }
 
   return (
     <div className="app">

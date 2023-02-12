@@ -81,6 +81,7 @@ export default function Register({userId, authorization}) {
       const url = `http://making.infura-ipfs.io/ipfs/${added.path}`;
       console.log(url);
       setMintNFT({
+        ...mintNFT,
         nft_address: mintNFT.nft_address,
         nft_imgURL: url,
         description: mintNFT.description,
@@ -187,6 +188,7 @@ export default function Register({userId, authorization}) {
             console.log(res.data)
             
             setMintNFT({
+              ...mintNFT,
                 deposit: mintNFT.deposit ,
                 rental: mintNFT.rental,
                 description: mintNFT.description,
@@ -199,7 +201,7 @@ export default function Register({userId, authorization}) {
   }
 
   console.log(mintNFT);
-  // mintNFT.types 에 로그인한 이메일이 들어가있음
+
 
   return (
     <div className="mb-6 pt-4 mt-20">
