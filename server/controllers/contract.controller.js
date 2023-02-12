@@ -81,21 +81,22 @@ module.exports= {
     }
     try{
         const token = authorization.split(' ')[1];
-        const data =jwt.verify(token,process.env.ACCESS_SECRET);
+        const data = jwt.verify(token,process.env.ACCESS_SECRET);
         if(data){
             //tenantAgreement와 OwnerAgreement가 포함된 Estate 보여주기
+            
             const contractEstate = await Estate.findOne({
                 include :[{
                     model : TenantAgreement,
                     where : {
-                        tenantestateTokenId : "0xq9886jqwt"
+                        tenantestateTokenId,
                     },
                     attributes : ['tenantAgreement']
                 },
                 {
                     model : OwnerAgreement,
                     where : {
-                        ownerestateTokenId : "0xq9886jqwt"
+                        ownerestateTokenId,
                     },
                     attributes : ['ownerAgreement']
                 }

@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ContractAgree from "./ContractAgree";
 import { Link } from "react-router-dom";
 
-function Contract() {
+function Contract({userId, authorization}) {
   const [agreement, setAgreement] = useState({
     // ownerAgreement: "", // 임대인 특약조항
     tenantAgreement: "", // 임차인 특약조항
@@ -27,7 +27,8 @@ function Contract() {
   function handleSubmit(e) {
     e.preventDefault();
     axios
-      .post("http://localhost:8080/contract/tenantcheck", agreement)
+      .post("http://localhost:8080/contract/tenantcheck", agreement,
+      { headers: { authorization: `Bearer ${authorization}` } })
       .then((result) => {
         console.log(result);
         setAgreement({ tenantAgreement: agreement.tenantAgreement });
