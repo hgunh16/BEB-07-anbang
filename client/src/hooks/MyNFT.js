@@ -65,13 +65,17 @@ useEffect(() => {
           axios
             .get(`https://cors-anywhere.herokuapp.com/${tokenURL}`)
             .then((res) => {
-              NFTInfo([...res.data]);
+              setNFTInfo(prevNFTInfo => [...prevNFTInfo], {
+                nft_imgURL: res.data.imgFile,
+                types: res.data.types,
+                nft_address: res.data.nft_adress
+              })
             })
             .catch((err) => console.log(err));
         }
         fetchData();
-      }, [NFTInfo]);
-      
+      }, []);
+   
         // const [NFTInfo, setNFTInfo] = useState({});
         // const {ownedEstate, contractingEstate} = NFTInfo;
     

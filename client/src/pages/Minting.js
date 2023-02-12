@@ -81,9 +81,9 @@ export default function Register({userId, authorization}) {
       const url = `http://making.infura-ipfs.io/ipfs/${added.path}`;
       console.log(url);
       setMintNFT({
+        ...mintNFT,
         nft_address: mintNFT.nft_address,
         nft_imgURL: url,
-        types: mintNFT.types,
         description: mintNFT.description,
         types: mintNFT.types
       });
@@ -113,6 +113,7 @@ export default function Register({userId, authorization}) {
       imgFile == null
     ) {
       console.log("빈 칸이 있으면 안됩니다");
+      alert("빈 칸이 있으면 안됩니다")
       return false;
     }
     await submitImage();
@@ -158,7 +159,7 @@ export default function Register({userId, authorization}) {
         });
     }
   }
-
+  // console.log(mintNFT)
   // 매물관련 DB post
 
   async function postDB (event){
@@ -187,6 +188,7 @@ export default function Register({userId, authorization}) {
             console.log(res.data)
             
             setMintNFT({
+              ...mintNFT,
                 deposit: mintNFT.deposit ,
                 rental: mintNFT.rental,
                 description: mintNFT.description,
@@ -197,6 +199,8 @@ export default function Register({userId, authorization}) {
         .catch((e)=> console.log(e))
     }
   }
+
+  console.log(mintNFT);
 
 
   return (

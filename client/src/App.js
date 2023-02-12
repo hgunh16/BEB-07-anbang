@@ -53,14 +53,6 @@ function App() {
     setIsLogin(true);
   }
 
-  const getToken = async () => {
-    const accessInfo = await axios.get("http://localhost:8080/user/login")
-    .then((result)=> {
-      setAuthorization({...result.data})
-    })
-    .catch(console.log);
-
-  }
 
   return (
     <div className="app">

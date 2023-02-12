@@ -10,8 +10,7 @@ import {erc20_ABI, erc20_contractAddress} from '../contract/ERC20_ABI';
 
 function Contract() {
   const [agreement, setAgreement] = useState({
-    // ownerAgreement: "", // 임대인 특약조항
-    tenantAgreement: "", // 임차인 특약조항
+    tenantAgreement: "", // 특약조항
     contractPeriod: "", // 계약기간
   });
 
@@ -49,6 +48,7 @@ function Contract() {
 
     
   }
+
 
   const handleInputValue = (key) => (e) => {
     setAgreement({ ...agreement, [key]: e.target.value });
