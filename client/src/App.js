@@ -22,6 +22,12 @@ import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 function App() {
   const [isLogin, setIsLogin] = useState(false);
   const navigation = useNavigate();
+  
+
+  const [authorization, setAuthorization] = useState({
+    accessToken: "",
+    id : ""
+  });
 
   const [authorization, setAuthorization] = useState(""); //authrization 에 accessToken들어오게끔
   const [userId, setUserId] = useState(""); // userId 값
@@ -29,6 +35,7 @@ function App() {
     setAuthorization(token);
     setUserId(id);
   }
+
 
 
   const loginHandler = async () => {
@@ -46,7 +53,14 @@ function App() {
     setIsLogin(true);
   }
 
+  const getToken = async () => {
+    const accessInfo = await axios.get("http://localhost:8080/user/login")
+    .then((result)=> {
+      setAuthorization({...result.data})
+    })
+    .catch(console.log);
 
+  }
 
   return (
     <div className="app">
@@ -54,12 +68,12 @@ function App() {
       <Routes>
         <Route path="/" element={<Preview />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/login" element={<Login setUserAuth={setUserAuth} />} />
+        <Route path="/login" element={<Login authorization={authorization} />} />
         {/* { isLogin ? <Route path="/main" element={<Main isLogin={isLogin}/>} /> : <Route path="/login"/>} 로그인 되었을 때만 메인보이게 */}
         <Route path="/main" element={<Main />} />
         <Route path="/token" element={<Token />} />
         <Route path="/NFTdetail" element={<NFTdetail />} />
-        <Route path="/mypage" element={<Mypage userId={userId} authorization={authorization} />} />
+        <Route path="/mypage" element={<Mypage/>} />
         <Route path="/message" element={<Message />} />
         <Route path="/minting" element={<Minting userId={userId} authorization={authorization}/>} />
         <Route path="/contract" element={<Contract />} />
