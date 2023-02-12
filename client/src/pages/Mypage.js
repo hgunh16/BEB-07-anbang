@@ -10,8 +10,8 @@ import MyNFT from "../hooks/MyNFT";
 // stylesheet
 import "../assets/css/main.css";
 
-export default function Mypage() {
-
+export default function Mypage({userId, authorization}) {
+    
     const [MyNFTInfo, setMyNFTInfo] = useState([])
 
       useEffect(()=>{
@@ -28,7 +28,7 @@ export default function Mypage() {
                 <div className="flex flex-col mt-20">
                     <div className="flex flex-col justify-center items-center font-bold text-3xl mr-5">보유 NFT 리스트</div>
                     <div className="mb-30">
-                    <MyNFT />
+                    <MyNFT userId={userId} authorization={authorization} />
                 </div>
             </div>
         </div>      

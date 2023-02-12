@@ -23,8 +23,8 @@ function App() {
   const [isLogin, setIsLogin] = useState(false);
   const navigation = useNavigate();
 
-  const [authorization, setAuthorization] = useState("");
-  const [userId, setUserId] = useState("");
+  const [authorization, setAuthorization] = useState(""); //authrization 에 accessToken들어오게끔
+  const [userId, setUserId] = useState(""); // userId 값
   const setUserAuth = (token, id) => {
     setAuthorization(token);
     setUserId(id);
@@ -61,7 +61,7 @@ function App() {
         <Route path="/NFTdetail" element={<NFTdetail />} />
         <Route path="/mypage" element={<Mypage userId={userId} authorization={authorization} />} />
         <Route path="/message" element={<Message />} />
-        <Route path="/minting" element={<Minting />} />
+        <Route path="/minting" element={<Minting userId={userId} authorization={authorization}/>} />
         <Route path="/contract" element={<Contract />} />
         <Route path="/contractagree" element={<ContractAgree />} />
         <Route path="/report" element={<Report />} />
