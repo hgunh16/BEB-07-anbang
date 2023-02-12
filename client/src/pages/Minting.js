@@ -180,7 +180,9 @@ export default function Register({userId, authorization}) {
     // console.log(TokenId);
     // console.log(mintNFT);
     if(mintNFT.deposit && mintNFT.rental && mintNFT.description ) {
-        axios.post("http://localhost:8080/estate/register", mintNFT)
+      axios.post("http://localhost:8080/estate/register",
+        mintNFT,
+        { headers: { authorization: `Bearer ${authorization}` } })
         .then((res) =>{
             console.log(res.data)
             

@@ -27,6 +27,10 @@ function handleSubmit(event){
           console.log(result.data)
           if(result.data.status==="success") {
               setAccount({email: account.email, password: account.password, isConnected: "true"})}
+
+              setUserAuth(result.data.data.accessToken, result.data.data.userData.id)
+              console.log(result.data.data.accessToken, result.data.data.userData.id)
+
               localStorage.setItem("account", JSON.stringify(account)); // account state 저장
               navigate("/main", { state: { account } })
               console.log(account);

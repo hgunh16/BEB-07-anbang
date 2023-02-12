@@ -7,7 +7,7 @@ module.exports ={
     mypage : async(req,res,next)=>{
       // 로그인 검증
       const authorization = req.headers['authorization'];
-      // console.log(authorization)
+      console.log(authorization)
       if (!authorization) {
           return res.status(400).json({ data: null, message: 'invalid access token' });
       }
