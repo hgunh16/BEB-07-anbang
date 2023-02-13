@@ -23,13 +23,9 @@ function App() {
   const [isLogin, setIsLogin] = useState(false);
   const navigation = useNavigate();
   
+  
 
-  const [authorization, setAuthorization] = useState({
-    accessToken: "",
-    id : ""
-  });
-
-  // const [authorization, setAuthorization] = useState(""); //authrization 에 accessToken들어오게끔
+  const [authorization, setAuthorization] = useState(""); //authrization 에 accessToken들어오게끔
   const [userId, setUserId] = useState(""); // userId 값
   const setUserAuth = (token, id) => {
     setAuthorization(token);
@@ -60,12 +56,12 @@ function App() {
       <Routes>
         <Route path="/" element={<Preview />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/login" element={<Login authorization={authorization} />} />
+        <Route path="/login" element={<Login setUserAuth={setUserAuth} />} />
         {/* { isLogin ? <Route path="/main" element={<Main isLogin={isLogin}/>} /> : <Route path="/login"/>} 로그인 되었을 때만 메인보이게 */}
         <Route path="/main" element={<Main />} />
         <Route path="/token" element={<Token />} />
         <Route path="/NFTdetail" element={<NFTdetail />} />
-        <Route path="/mypage" element={<Mypage/>} />
+        <Route path="/mypage" element={<Mypage userId={userId} authorization={authorization} />} />
         <Route path="/message" element={<Message />} />
         <Route path="/minting" element={<Minting userId={userId} authorization={authorization}/>} />
         <Route path="/contract" element={<Contract />} />
