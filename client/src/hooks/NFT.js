@@ -12,7 +12,9 @@ import { Description } from "@ethersproject/properties";
 import {erc721_ABI, NFT_contractAddress} from '../contract/NFT_ABI';
 import {ethers} from "ethers"
 
-export default function NFT() {
+let imgURL=[];
+
+export default  function NFT() {
 
     const [NFTInfo, setNFTInfo] = useState([])
  
@@ -40,38 +42,47 @@ export default function NFT() {
           .get("http://localhost:8080/estate", NFTInfo)
           .then((result) => {
             // console.log(result.data);
+            fetchData([...result.data]);
             setNFTInfo([...result.data])
+            
           })
           .catch((err) => console.log(err));
+        
       }, []);
   
 
     // makingContract.tokenURI(96).then(e=>console.log(e));
     //ipfs 받아오는 이미지 url
-    useEffect(() => {
-      async function fetchData() {
-        // console.log(makingContract);
-        // console.log(NFTInfo[4].tokenId);
-        // makingContract.tokenURI(NFTInfo[4].tokenId).then(console.log);
-        const tokenURL = await makingContract.tokenURI(96);
+    
+    async function fetchData(data) {
+      // console.log(makingContract);
+      // console.log(NFTInfo[4].tokenId);
+      // makingContract.tokenURI(NFTInfo[4].tokenId).then(console.log);
+      data.map(async (e)=>{
+        let tokenId = e.tokenId;
+        console.log(tokenId)
+        const tokenURL = await makingContract.tokenURI(tokenId);
         console.log(tokenURL);
-        axios
+        await axios
           .get(`https://cors-anywhere.herokuapp.com/${tokenURL}`)
           .then((res) => {
-            setNFTInfo(prevNFTInfo => [...prevNFTInfo, {
-              nft_imgURL: res.data.imgFile,
-              types: res.data.types,
-              nft_address: res.data.nft_address
-            }]);
+            // setNFTInfo(prevNFTInfo => [...prevNFTInfo, {
+            //   nft_imgURL: res.data.imgFile,
+            //   types: res.data.types,
+            //   nft_address: res.data.nft_address
+            // }]);
+            
+            imgURL[tokenId] = res.data.imgFile
+            // console.log(imgURL[120])
           })
           .catch((err) => console.log(err));
-      }
-      fetchData();
-    }, []);
-
-  console.log(NFTInfo)
-
+      })
       
+    }
+  // let result = await fetchData(120);
+  // console.log(a)
+  
+  console.log(NFTInfo)      
     return(
     <div className="grid grid-flow-row gap-10 text-neutral-600 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {NFTInfo && NFTInfo.map((post)=> (
@@ -88,7 +99,7 @@ export default function NFT() {
                 post.tokenId
             )} 
             className="w-full h-[200px] object-cover rounded-t-lg" 
-            src={post.nft_imgURL}></img>
+            src={imgURL[post.tokenId]}></img>
                 <p className="mt-5 flex flex-row justify-center items-center">{`임대종류 : ${post.types}`}</p>
                 <p className="mt-5 flex flex-row justify-center items-center">{`주소 : ${post.nft_address}`}</p>   
                 <p className="mt-5 flex flex-row justify-center items-center">{`보증금 : ${post.deposit}`}</p> 
