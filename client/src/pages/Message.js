@@ -1,14 +1,14 @@
 // modules
-import {useState, useEffect} from "react";
+import {useState, useEffect,useRef} from "react";
 import {Link} from "react-router-dom";
 import ReactDOM from 'react-dom'
 import { BrowserRouter, Route, Routes, Switch} from 'react-router-dom';
 import axios from "axios";
-
+import {io} from "socket.io-client"
 // stylesheet
 import "../assets/css/main.css";
 
-export default function Message() {
+export default function Message({userId}) {
 
     useEffect(()=>{
         if(localStorage.getItem('account') === null) {
@@ -18,15 +18,54 @@ export default function Message() {
 
     const [selectedUser, setSelectedUser] = useState('나');
     const [messages, setMessages] = useState([]);
-    const [inputValue, setInputValue] = useState('');
+    const [newMessage, setNewMessage] = useState('');
+    const [arrivalMessage, setArrivalMessage] = useState(null);
+    const [currentChat, setCurrentChat]=useState(null); 
     
+    const socket = useRef();
+
+    useEffect(()=>{
+      socket.current = io("ws://localhost:8080");
+      socket.current.on("getMessage", data=> {
+        setArrivalMessage({
+          userId : data.senderId,
+          messages: data.text,
+          createdAt:Date.now(),
+        })
+      })
+    },[]);
+
+    useEffect(()=>{
+      arrivalMessage &&
+        currentChat?.members.includes(arrivalMessage.sender) && 
+        setMessages((prev)=>[...messages,arrivalMessage]);
+    },[arrivalMessage, currentChat])
+
+    useEffect(()=>{
+      socket.current.emit("addUser", userId);
+      socket.current.on("getUsers", users=>{
+        console.log(users)
+      })
+    },[userId])
+
+
     function handleSubmit(event) {
         event.preventDefault();
+        
         const message = {
           user: selectedUser,
-          text: inputValue,
+          text: newMessage,
           timestamp: new Date(),
         };
+
+        const receiverId = currentChat.members.find(member=>member !== userId)
+
+        socket.current.emit("sendMessage", {
+          senderId : selectedUser,
+          receiverId,
+          text :  newMessage
+        })
+
         axios
           .post('http://localhost:8080/send', message)
           .then((res) => {
@@ -34,6 +73,8 @@ export default function Message() {
             setMessages([...messages, res.data]);
           });
       }
+      
+
 
       function chatRoom(event) {
         event.preventDefault();
@@ -50,12 +91,12 @@ export default function Message() {
 
     // server 연결하면 알림 API 사용 가능
     if (Notification.permission === 'granted') {
-        new Notification(`New message from ${selectedUser}: ${inputValue}`);
+        new Notification(`New message from ${selectedUser}: ${newMessage}`);
       } else if (Notification.permission !== 'denied') {
         Notification.requestPermission().then((permission) => {
           if (permission === 'granted') {
             new Notification(
-              `New message from ${selectedUser}: ${inputValue}`
+              `New message from ${selectedUser}: ${newMessage}`
             );
           }
         });
@@ -104,8 +145,8 @@ export default function Message() {
               <input
                 type="text"
                 className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                value={inputValue}
-                onChange={(event) => setInputValue(event.target.value)}
+                value={newMessage}
+                onChange={(event) => setNewMessage(event.target.value)}
                 />
                 <button
                 onSubmit={handleSubmit}                
@@ -119,3 +160,5 @@ export default function Message() {
           </div>
         );
     };
+
+

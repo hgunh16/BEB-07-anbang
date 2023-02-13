@@ -45,13 +45,13 @@ export default function Main() {
                   <a>
                     <button
                       type="button"
-                      className="inline-block px-6 py-2.5 bg-stone-600/50 text-white font-medium text-xs leading-tight uppercase hover:bg-blue-700 focus:bg-blue-700 focus:outline-none focus:ring-0 active:bg-blue-800 transition duration-150 ease-in-out"
+                      className="rounded-r inline-block px-6 py-2.5 bg-stone-600/50 text-white font-medium text-xs leading-tight uppercase hover:bg-blue-700 focus:bg-blue-700 focus:outline-none focus:ring-0 active:bg-blue-800 transition duration-150 ease-in-out"
                     >
                       NFT 등록
                     </button>
                   </a>
                 </Link>
-                <Link to="/message" component={Message}>
+                {/* <Link to="/message" component={Message}>
                   <a>
                     <button
                       type="button"
@@ -60,7 +60,7 @@ export default function Main() {
                       메세지
                     </button>
                   </a>
-                </Link>
+                </Link> */}
               </div>
             </div>
           </div>
