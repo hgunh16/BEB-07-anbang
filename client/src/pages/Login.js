@@ -3,12 +3,11 @@ import {useNavigate} from "react-router-dom"
 import axios from "axios"
 
 
-function Login() {
+function Login({setUserAuth}) {
   const navigate = useNavigate();
   const [account, setAccount] = useState({
     email:"",
     password:"",
-    accessToken: ""
   })
 
   const handleInputValue = (key) => (e) => {
@@ -28,7 +27,7 @@ function handleSubmit(event){
           if(result.data.status==="success") {
               setAccount({email: account.email, password: account.password, isConnected: "true"})}
 
-              // setUserAuth(result.data.data.accessToken, result.data.data.userData.id)
+              setUserAuth(result.data.data.accessToken, result.data.data.userData.id)
               console.log(result.data.data.accessToken, result.data.data.userData.id)
 
               localStorage.setItem("account", JSON.stringify(account)); // account state 저장
