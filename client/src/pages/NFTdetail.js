@@ -38,15 +38,15 @@ export default function NFTdetail() {
             tokenId: tokenId
         }});
       };
-
+      
     return(
     <div className="w-full py-[10rem] px-4 bg-white absoulte">
         <div>
             <div className="flex flex-col mt-20 items-center max-w-[1240px] mx-auto">
                 <div className="w-full shadow-xl flex flex-col p-4 my-4 rounded-lg hover:scale-105 duration-300">
-                    <img  className="w-full mx-auto mt-[-3rem]" src={image}></img>
+                    <img className="w-full mx-auto mt-[-3rem]" src={image}></img>
                     <div id="userId">{`주소: ${address}`}</div>
-                    <div id="cost">{`월세 ${cost}`}</div>
+                    <div id="cost">{`월세 : ${cost}`}</div>
                     <div id="deposit">{`보증금 : ${deposit}`}</div>
                     <div id="description">{`설명 : ${description}`}</div>
                     <div id="rentKinds">{`임대 종류 : ${rentKinds}`}</div>
